@@ -25,7 +25,7 @@ public class Menu {
 
 		ContaCorrente cc1 = new ContaCorrente(contas.gerarNumero(), 123, 1, "Beatriz Camargo", 1000f, 100.0f);
 		contas.cadastrar(cc1);
-		
+
 		ContaCorrente cc2 = new ContaCorrente(contas.gerarNumero(), 124, 1, "Adriana Camargo", 2000f, 100.0f);
 		contas.cadastrar(cc2);
 
@@ -127,17 +127,69 @@ public class Menu {
 				System.out.println(Cores.TEXT_RED_BOLD_BRIGHT + Cores.ANSI_BLACK_BACKGROUND
 						+ "Consultar dados da conta - por número\n\n");
 
+				System.out.println("Digite o número da conta: ");
+				numero = leia.nextInt();
+
+				contas.procurarPorNumero(numero);
+
 				keyPress();
 				break;
 			case 4:
 				System.out.println(
 						Cores.TEXT_RED_BOLD_BRIGHT + Cores.ANSI_BLACK_BACKGROUND + "Atualizar dados da conta\n\n");
 
+				System.out.println("Digite o número da conta: ");
+				numero = leia.nextInt();
+
+				var buscarConta = contas.buscarNaCollection(numero);
+
+				if (buscarConta != null) {
+
+					tipo = buscarConta.getTipo();
+
+					System.out.println("Digite o número da agência: ");
+					agencia = leia.nextInt();
+					System.out.println("Digite o nome do titular: ");
+					leia.skip("\\R?");
+					titular = leia.nextLine();
+
+					System.out.println("Digite o saldo da conta: R$ ");
+					saldo = leia.nextFloat();
+
+					switch (tipo) {
+					case 1 -> {
+						System.out.println("Digite o limite de crédito: R$ ");
+						limite = leia.nextFloat();
+
+						contas.atualizar(new ContaCorrente(numero, agencia, tipo, titular, saldo, limite));
+					}
+
+					case 2 -> {
+						System.out.println("Digite o dia do aniversário da conta: ");
+						aniversario = leia.nextInt();
+
+						contas.atualizar(new ContaPoupanca(numero, agencia, tipo, titular, saldo, aniversario));
+
+					}
+					default -> {
+						System.out.println("Tipo de conta inválido!");
+					}
+					}
+
+				} else {
+					System.out.println("A conta não foi encontrada!");
+				}
+
 				keyPress();
 				break;
 			case 5:
 				System.out.println(Cores.TEXT_RED_BOLD_BRIGHT + Cores.ANSI_BLACK_BACKGROUND + "Apagar a conta\n\n");
-
+				
+				System.out.println("Digite o número da conta: ");
+				numero = leia.nextInt();
+				
+				contas.deletar(numero);
+				
 				keyPress();
 				break;
 			case 6:
